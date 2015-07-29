@@ -54,7 +54,8 @@ class Warrior < Square
 
       target = base
       @target = target
-      @target_distance = Gosu.distance(self.x, self.y, @target.x, @target.y)
+      @target_distance = Gosu.distance(self.x, self.y, @target.x, @target.y) if @target
+      @target_distance = nil unless @target
     else
       if target
         @target = target

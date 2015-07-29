@@ -9,6 +9,7 @@ require_relative "lib/objects/warrior"
 
 class Frame < Gosu::Window
   include Drawing
+  attr_accessor :post_game, :game_time
 
   def initialize
     # super(700, 600, false)
@@ -17,6 +18,9 @@ class Frame < Gosu::Window
     self.caption = "War Of The Squares (#{Gosu.language})"
     @title = Text.new("War Of The Squares", font: "Wallpoet", size: 58, x: 10, color: Gosu::Color::BLACK)
     @fps = Text.new("", font: "Wallpoet", size: 40, x: 10, y: 45, color: Gosu::Color::BLACK)
+
+    @post_game = Text.new("", font: "Wallpoet", size: 50, x: $window.width/3, y: $window.height/3, color: Gosu::Color::BLACK, z: 110)
+    @game_time = Text.new("", font: "Wallpoet", size: 40, x: $window.width/3, y: $window.height/3+55, color: Gosu::Color::BLACK, z: 110)
 
     Base.new(100, 120, true)
     Base.new($window.width-500, 250, false)
@@ -29,6 +33,9 @@ class Frame < Gosu::Window
 
     @title.draw
     @fps.draw
+
+    @post_game.draw
+    @game_time.draw
   end
 
   def update
@@ -48,7 +55,7 @@ class Frame < Gosu::Window
       end
     end
 
-    @fps.text = "FPS: #{Gosu.fps} - #{(Gosu.milliseconds/1000.0).round(1)} seconds"
+    @fps.text = "FPS: #{Gosu.fps}"
   end
 
   def needs_cursor?

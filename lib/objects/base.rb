@@ -14,10 +14,12 @@ class Base < Square
     @move_tick+=1
 
      if die?
-       puts "#{Etc.getlogin} Won!" if !@friendly
-       puts "#{Etc.getlogin} Lost!" if @friendly
-       puts "Took #{Gosu.milliseconds/1000.0} seconds."
-       exit
+      unless @friendly
+        $window.post_game.text = "#{Etc.getlogin} Won!"
+      else
+        $window.post_game.text = "#{Etc.getlogin} Lost!"
+      end
+        $window.game_time.text = "Took #{Gosu.milliseconds/1000.0} seconds."
      end
     super
 

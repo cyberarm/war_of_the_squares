@@ -32,15 +32,16 @@ class Frame < Gosu::Window
   end
 
   def update
+    exit if $window.button_down?(Gosu::KbEscape)
     Square.all.each(&:update)
 
     Square.all.each do |squareA|
-      Square.all.each do |square|
-        if squareA.friendly != square.friendly
-          if squareA.x.between?(square.x, square.x+64)
-            if squareA.y.between?(square.y, square.y+64)
+      Square.all.each do |squareB|
+        if squareA.friendly != squareB.friendly
+          if squareA.x.between?(squareB.x, squareB.x+64)
+            if squareA.y.between?(squareB.y, squareB.y+64)
               squareA.hit
-              square.hit
+              squareB.hit
             end
           end
         end

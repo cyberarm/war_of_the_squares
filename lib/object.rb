@@ -1,7 +1,8 @@
 class Square
+  Place = Struct.new(:x, :y)
   include Drawing
 
-  attr_accessor :x, :y, :z, :alpha, :color, :health, :friendly
+  attr_accessor :x, :y, :z, :alpha, :color, :health, :max_health, :friendly
   @@objects = []
 
   def initialize(x = 0, y = 0, friendly = false)
@@ -11,11 +12,12 @@ class Square
     @alpha = 255
     @color = Gosu::Color::BLACK
     @health = 250
+    @max_health = 250
     @friendly = friendly
 
     @@objects << self
 
-    @health_points = Text.new("#{@health}", size: 12, font: "", z: 100, color: Gosu::Color::BLACK)
+    @health_points = Text.new("#{@health}", size: 12, z: 100, color: Gosu::Color::BLACK)
     @health_points.text = "#{@health}"
     @health_points.x = self.x+20
     @health_points.y = self.y-33
@@ -27,8 +29,9 @@ class Square
     fill_rect(@x, @y, 64, 64, @color)
 
     # health
-    fill_rect(@x, @y-36, (@health/100.0*64), 18, Gosu::Color.rgba(0, 255, 0, 180), 99) if @friendly
-    fill_rect(@x, @y-36, (@health/100.0*64), 18, Gosu::Color.rgba(255, 0, 0, 180), 99) unless @friendly
+    fill_rect(@x, @y-36, (@max_health/100.0*64), 18, Gosu::Color.rgba(0, 0, 0, 180), 98)
+    fill_rect(@x, @y-36, (@health/100.0*64), 18, Gosu::Color.rgba(0, 255, 0, 200), 99) if @friendly
+    fill_rect(@x, @y-36, (@health/100.0*64), 18, Gosu::Color.rgba(255, 0, 0, 200), 99) unless @friendly
     @health_points.draw
   end
 
@@ -36,6 +39,7 @@ class Square
     @health_points.text = "#{@health}"
     @health_points.x = self.x+20
     @health_points.y = self.y-33
+    die?
   end
 
   def hit

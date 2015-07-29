@@ -16,6 +16,7 @@ class Text
     @options[:color] ||= Gosu::Color.rgba(255,255,255,255)
     @options[:alpha] ||= @options[:color].alpha
     @options[:size]  ||= 13
+    @options[:font]  ||= Gosu.default_font_name
 
     @x = @options[:x]
     @y = @options[:y]

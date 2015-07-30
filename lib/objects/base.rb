@@ -9,17 +9,27 @@ class Base < Square
     @move_tick = 0
   end
 
+  def draw
+    super
+    draw_line(@x+32, @y+32, @target.x+32, @target.y+32, 1, Gosu::Color::GREEN, 101) if @target && @friendly
+  end
+
   def update
     @tick+=1
     @move_tick+=1
 
-     if die?
+     if die? && !@locked
+      @locked = true
+
       unless @friendly
         $window.post_game.text = "#{Etc.getlogin} Won!"
+        friendly = self
+
+        $window.game_time.text = "Took #{Gosu.milliseconds/1000.0} seconds, and you took #{friendly.max_health-friendly.health} of #{friendly.max_health} damage (#{100-((friendly.health.to_f/friendly.max_health.to_f)*100).to_i}%)"
       else
         $window.post_game.text = "#{Etc.getlogin} Lost!"
+        $window.game_time.text = "Took #{Gosu.milliseconds/1000.0} seconds, and you took #{self.max_health} of #{self.max_health} damage (100%)"
       end
-        $window.game_time.text = "Took #{Gosu.milliseconds/1000.0} seconds."
      end
     super
 
@@ -41,7 +51,7 @@ class Base < Square
     if @move_tick >= 4*60 && !@friendly
       unless @target
         @move_tick = 0
-        @target   = Place.new(rand(Gosu.screen_width-70), rand(Gosu.screen_height-70))
+        @target   = Place.new(SecureRandom.random_number($window.width-70), SecureRandom.random_number($window.height-70))
       else
         @move_tick = 0
       end
@@ -49,6 +59,7 @@ class Base < Square
   end
 
   def spawn_square
-    Warrior.new(self.x, self.y, @friendly)
+    spawn = Square.all.detect {|square| if square.friendly != self.friendly; true; end}
+    Warrior.new(self.x, self.y, @friendly) if spawn
   end
 end

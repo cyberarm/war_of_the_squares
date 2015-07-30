@@ -17,7 +17,7 @@ class Square
 
     @@objects << self
 
-    @health_points = Text.new("#{@health}", size: 12, z: 100, color: Gosu::Color::BLACK)
+    @health_points = Text.new("#{@health}", size: 14, z: 100, color: Gosu::Color::BLACK)
     @health_points.text = "#{@health}"
     @health_points.x = self.x+20
     @health_points.y = self.y-33

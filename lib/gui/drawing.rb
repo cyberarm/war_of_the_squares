@@ -17,9 +17,9 @@ module Drawing
 
   def draw_line(x, y, x2, y2, width, color, z = 0, mode = :default)
     return $window.draw_quad(x, y, color,
-                             x+width, y+width, color,
-                             x2+width, y2+width, color,
+                             x+width, y-width, color,
                              x2, y2, color,
+                             x2+width, y2+width, color,
                              z, mode)
   end
 end

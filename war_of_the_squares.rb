@@ -1,5 +1,8 @@
 require "etc"
 require "gosu"
+require "securerandom"
+SecureRandom.random_number(100) # Prep, I guess?
+
 require_relative "lib/gui/font"
 require_relative "lib/gui/drawing"
 
@@ -12,15 +15,15 @@ class Frame < Gosu::Window
   attr_accessor :post_game, :game_time
 
   def initialize
-    # super(700, 600, false)
-    super(Gosu.screen_width, Gosu.screen_height, true)
+    super(1280, 720, false)
+    # super(Gosu.screen_width, Gosu.screen_height, true)
     $window = self
     self.caption = "War Of The Squares (#{Gosu.language})"
     @title = Text.new("War Of The Squares", font: "Wallpoet", size: 58, x: 10, color: Gosu::Color::BLACK)
     @fps = Text.new("", font: "Wallpoet", size: 40, x: 10, y: 45, color: Gosu::Color::BLACK)
 
     @post_game = Text.new("", font: "Wallpoet", size: 50, x: $window.width/3, y: $window.height/3, color: Gosu::Color::BLACK, z: 110)
-    @game_time = Text.new("", font: "Wallpoet", size: 40, x: $window.width/3, y: $window.height/3+55, color: Gosu::Color::BLACK, z: 110)
+    @game_time = Text.new("", font: "Wallpoet", size: 30, x: 100, y: $window.height/3+55, color: Gosu::Color::BLACK, z: 110)
 
     Base.new(100, 120, true)
     Base.new($window.width-500, 250, false)
@@ -45,8 +48,8 @@ class Frame < Gosu::Window
     Square.all.each do |squareA|
       Square.all.each do |squareB|
         if squareA.friendly != squareB.friendly
-          if squareA.x.between?(squareB.x, squareB.x+64)
-            if squareA.y.between?(squareB.y, squareB.y+64)
+          if squareA.x.between?(squareB.x-4, squareB.x+68)
+            if squareA.y.between?(squareB.y-4, squareB.y+68)
               squareA.hit
               squareB.hit
             end

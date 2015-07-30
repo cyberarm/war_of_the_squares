@@ -52,6 +52,20 @@ class Warrior < Square
         end
       end
 
+      # No enemie base
+      unless base
+        base = Square.all.detect do |square|
+          if square.friendly != self.friendly
+            true
+          end
+        end
+      end
+
+      # No enemies
+      unless base
+        base = Place.new(rand($window.width-70), rand($window.height-70))
+      end
+
       target = base
       @target = target
       @target_distance = Gosu.distance(self.x, self.y, @target.x, @target.y) if @target

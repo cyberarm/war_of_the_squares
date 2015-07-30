@@ -1,4 +1,6 @@
 class Base < Square
+  @@locked = false
+
   def setup
     # setup the mind...
     @color = Gosu::Color::BLACK if @friendly
@@ -18,8 +20,8 @@ class Base < Square
     @tick+=1
     @move_tick+=1
 
-     if die? && !@locked
-      @locked = true
+     if die? && !@@locked
+      @@locked = true
 
       unless @friendly
         $window.post_game.text = "#{Etc.getlogin} Won!"

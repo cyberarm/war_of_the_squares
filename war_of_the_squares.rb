@@ -15,8 +15,16 @@ class Frame < Gosu::Window
   attr_accessor :post_game, :game_time
 
   def initialize
-    super(1280, 720, false)
-    # super(Gosu.screen_width, Gosu.screen_height, true)
+    super(1200, 600, false)
+    super(Gosu.screen_width, Gosu.screen_height, true)
+
+    if Gosu.screen_width < 1280
+      if Gosu.screen_height < 720
+        puts "NOT IDEAL SCREEN RESOLUTION!"
+        puts "Recommend at least 1280x720 (HD)."
+      end
+    end
+
     $window = self
     self.caption = "War Of The Squares (#{Gosu.language})"
     @title = Text.new("War Of The Squares", font: "Wallpoet", size: 58, x: 10, color: Gosu::Color::BLACK)

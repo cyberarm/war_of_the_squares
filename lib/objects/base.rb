@@ -23,14 +23,13 @@ class Base < Square
      if die? && !@@locked
       @@locked = true
 
-      unless @friendly
-        $window.post_game.text = "#{Etc.getlogin} Won!"
-        friendly = self
-
-        $window.game_time.text = "Took #{Gosu.milliseconds/1000.0} seconds, and you took #{friendly.max_health-friendly.health} of #{friendly.max_health} damage (#{100-((friendly.health.to_f/friendly.max_health.to_f)*100).to_i}%)"
-      else
+      if self.friendly
         $window.post_game.text = "#{Etc.getlogin} Lost!"
         $window.game_time.text = "Took #{Gosu.milliseconds/1000.0} seconds, and you took #{self.max_health} of #{self.max_health} damage (100%)"
+      else
+        $window.post_game.text = "#{Etc.getlogin} Won!"
+        friendly = Square.all.detect {|s| if s.friendly && s.is_a?(Base); true; end}
+        $window.game_time.text = "Took #{Gosu.milliseconds/1000.0} seconds, and you took #{friendly.max_health-friendly.health} of #{friendly.max_health} damage (#{100-((friendly.health.to_f/friendly.max_health.to_f)*100).to_i}%)"
       end
      end
     super

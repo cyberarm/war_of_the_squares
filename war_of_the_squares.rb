@@ -71,6 +71,10 @@ class Frame < Gosu::Window
   def needs_cursor?
     return true
   end
+
+  def button_up(id)
+    Square.all.each {|square| square.button_up(id) if defined?(square.button_up)}
+  end
 end
 
-Frame.new.show
+Frame.new.show unless defined?(Ocra)

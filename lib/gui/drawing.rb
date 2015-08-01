@@ -9,9 +9,9 @@ module Drawing
 
   def fill_square(x, y, x2, y2, color, z = 0, mode = :default)
     return $window.draw_quad(x, y, color,
-                             x2, y, color,
                              x2, y2, color,
-                             x, y2, color,
+                             x, y, color,
+                             x2, y2, color,
                              z, mode)
   end
 

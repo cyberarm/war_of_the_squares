@@ -1,6 +1,4 @@
 class Base < Square
-  @@locked = false
-
   def setup
     # setup the mind...
     @color = Gosu::Color::BLACK if @friendly
@@ -13,36 +11,18 @@ class Base < Square
 
   def draw
     super
-    draw_line(@x+32, @y+32, @target.x+32, @target.y+32, 1, Gosu::Color::GREEN, 101) if @target && @friendly
+    draw_line(@x + @half_size, @y + @half_size, @target.x + @half_size, @target.y + @half_size, 1, Gosu::Color::GREEN, 101) if @target && @friendly
   end
 
   def update
     @tick+=1
     @move_tick+=1
 
-     if die? && !@@locked
-      @@locked = true
-
-      if self.friendly
-        $window.post_game.text = "#{Etc.getlogin} Lost!"
-        $window.game_time.text = "Took #{Gosu.milliseconds/1000.0} seconds, and you took #{self.max_health} of #{self.max_health} damage (100%)"
-      else
-        $window.post_game.text = "#{Etc.getlogin} Won!"
-        friendly = Square.all.detect {|s| if s.friendly && s.is_a?(Base); true; end}
-        $window.game_time.text = "Took #{Gosu.milliseconds/1000.0} seconds, and you took #{friendly.max_health-friendly.health} of #{friendly.max_health} damage (#{100-((friendly.health.to_f/friendly.max_health.to_f)*100).to_i}%)"
-      end
-     end
     super
 
     if @tick >= 100
       spawn_square
       @tick = 0
-    end
-
-    if $window.button_down?(Gosu::MsLeft) && @friendly
-      @target   = Place.new
-      @target.x = $window.mouse_x-32
-      @target.y = $window.mouse_y-32
     end
 
     @target = nil if @target && !@friendly && self.x.between?(@target.x-4, @target.x+4) && self.y.between?(@target.y-4, @target.y+4)
@@ -52,7 +32,7 @@ class Base < Square
     if @move_tick >= 4*60 && !@friendly
       unless @target
         @move_tick = 0
-        @target   = Place.new(SecureRandom.random_number($window.width-70), SecureRandom.random_number($window.height-70))
+        @target   = Place.new(SecureRandom.random_number(Gosu.screen_width-70), SecureRandom.random_number(Gosu.screen_height-70))
       else
         @move_tick = 0
       end
@@ -60,7 +40,7 @@ class Base < Square
   end
 
   def spawn_square
-    spawn = Square.all.detect {|square| if square.friendly != self.friendly; true; end}
+    spawn = Square.all.detect { |square| square.friendly != self.friendly }
     Warrior.new(self.x, self.y, @friendly) if spawn
   end
 end

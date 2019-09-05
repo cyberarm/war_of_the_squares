@@ -30,13 +30,13 @@ class Text
     # @color.alpha = @options[:alpha]
     @size  = @options[:size]
 
-    @font = Gosu::Font.new($window, @options[:font], @options[:size])
+    @font = Gosu::Font.new(@options[:size], name: @options[:font])
 
     @height = @font.height
   end
 
   def draw
-    @font.draw(@text, @x, @y, @z, @factor_x, @factor_y, @color)
+    @font.draw_text(@text, @x, @y, @z, @factor_x, @factor_y, @color)
   end
 
   def width

@@ -15,8 +15,8 @@ class Warrior < Square
 
     fill_rect(@x-64, @y-64, 192, 192, Gosu::Color.rgba(10,10,10,10))
 
-    draw_line(@x+32, @y+32, @target.x+32, @target.y+32, 1, Gosu::Color::YELLOW, 101) if @target && @friendly
-    draw_line(@x+32, @y+32, @target.x+32, @target.y+32, 1, Gosu::Color::BLACK,  101) if @target && !@friendly
+    draw_line(@x + @half_size, @y + @half_size, @target.x + @half_size, @target.y + @half_size, 1, Gosu::Color::YELLOW, 101) if @target && @friendly
+    draw_line(@x + @half_size, @y + @half_size, @target.x + @half_size, @target.y + @half_size, 1, Gosu::Color::BLACK,  101) if @target && !@friendly
     super
   end
 
@@ -24,8 +24,8 @@ class Warrior < Square
     super
     targets = Square.all.find_all do |square|
       if square.friendly != self.friendly
-        if square.x.between?(self.x-64, self.x+192)
-          if square.y.between?(self.y-64, self.y+192)
+        if square.x.between?(self.x - @size, self.x + @size * 3)
+          if square.y.between?(self.y - @size, self.y + @size * 3)
             true
           end
         end
@@ -33,7 +33,7 @@ class Warrior < Square
     end
 
     target = nil
-    distance= 172
+    distance= Float::INFINITY
     targets.each do |_target|
       _distance = Gosu.distance(self.x, self.y, _target.x, _target.y)
       if _distance < distance
@@ -63,7 +63,7 @@ class Warrior < Square
 
       # No enemies
       unless base
-        base = Place.new(rand($window.width-70), rand($window.height-70))
+        base = Place.new(rand(Gosu.screen_width-70), rand(Gosu.screen_height-70))
       end
 
       target = base
